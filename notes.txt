@@ -1,0 +1,15 @@
+api will just make updates to a json file. Could in the future move this to dynamodb localstack or something similar
+
+
+json format:
+
+```powershell
+$Env:AWS_ENDPOINT_URL="http://localhost:4566"
+aws dynamodb list-tables
+```
+
+
+```bash
+export AWS_ENDPOINT_URL="http://localhost:4566"
+aws dynamodb list-tables
+```

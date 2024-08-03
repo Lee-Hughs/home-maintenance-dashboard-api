@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - 4569:4569
+      - 4566:4566
+    environment:
+      - services=dynamodb:4569
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - PERSISTENCE=1
+    networks:
+      - home
+    volumes:
+      - "/mnt/c/Users/leehu/AppData/Roaming/localstack/home_maintenance_dashboard:/var/lib/localstack"
+      - "//var/run/docker.sock:/var/run/docker.sock"
+      - "./init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
+  api:
+    build:
+      context: .
+    networks:
+      - home
+    ports:
+      - 8080:8080
+    environment:
+      APP_NAME: Home Maintenance Dashbaord API
+      VERSION: 0.0.0
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    env_file:
+      - .env
+    command:
+      - /bin/bash
+      - -c
+      - |
+        uvicorn main:app \
+        --host 0.0.0.0 --port 8080 --reload
+    volumes:
+      - ./:/code/
+networks:
+  home:
+    # external: true
+    name: home

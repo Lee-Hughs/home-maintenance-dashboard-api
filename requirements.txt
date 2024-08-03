@@ -1,0 +1,10 @@
+fastap
+uvicorn
+prometheusrock
+starlette
+botocore
+boto3
+
+pytest
+coverage
+httpx
